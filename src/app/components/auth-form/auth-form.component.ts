@@ -30,6 +30,7 @@ import { RouterLink } from '@angular/router';
 export class AuthFormComponent {
   @Input() authType: 'register' | 'login' = 'register'
   @Input() isLoading: boolean = false
+  @Input() wrongCredentials: boolean = false
   @Output() formSubmitted = new EventEmitter<AuthFormValue>()
   authForm: FormGroup
 

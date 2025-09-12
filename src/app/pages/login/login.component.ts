@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AuthFormComponent } from "../../components/auth-form/auth-form.component";
 import { AuthFormValue } from '../../components/auth-form/auth-form-value.interface';
 import { AuthService } from '../../auth/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,14 +12,16 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   isLoading: boolean = false
+  wrongCredentials: boolean = false
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService) { }
 
   login(authFormValue: AuthFormValue) {
     this.isLoading = true
+    this.wrongCredentials = false
     this.authService.login(authFormValue)
       .subscribe({
-        error: (err) => console.error('Erreur login:', err)
+        error: (err) => this.wrongCredentials = true
       })
       .add(() => this.isLoading = false)
   }

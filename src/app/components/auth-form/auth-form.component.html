@@ -35,6 +35,10 @@
                 </mat-error>
             </mat-form-field>
 
+            <mat-error class="mb-4" *ngIf="wrongCredentials">
+                Nom d’utilisateur ou mot de passe invalide.
+            </mat-error>
+
             <div class="text-center mb-4">
                 <a [routerLink]="(authType === 'register') ? '/login' : '/register'"
                     class="text-blue-600 hover:underline">
