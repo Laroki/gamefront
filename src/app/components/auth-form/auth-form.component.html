@@ -1,0 +1,53 @@
+<div class="authform-container">
+    <mat-card class="authform-card">
+        <h2>{{(authType === 'register') ? "S'inscrire" : "Connexion"}}</h2>
+        <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+
+            <!-- Username -->
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Nom d'utilisateur</mat-label>
+                <input matInput placeholder="Username" formControlName="username" type="text">
+
+                <mat-error *ngIf="authForm.get('username')?.hasError('required')">
+                    Le nom d'utilisateur est requis
+                </mat-error>
+                <mat-error *ngIf="authForm.get('username')?.hasError('minlength')">
+                    Minimum 3 caractères
+                </mat-error>
+                <mat-error *ngIf="authForm.get('username')?.hasError('maxlength')">
+                    Maximum 20 caractères
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Password -->
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Mot de passe</mat-label>
+                <input matInput placeholder="Mot de passe" formControlName="password" type="password">
+
+                <mat-error *ngIf="authForm.get('password')?.hasError('required')">
+                    Le mot de passe est requis
+                </mat-error>
+                <mat-error *ngIf="authForm.get('password')?.hasError('minlength')">
+                    Minimum 6 caractères
+                </mat-error>
+                <mat-error *ngIf="authForm.get('password')?.hasError('maxlength')">
+                    Maximum 50 caractères
+                </mat-error>
+            </mat-form-field>
+
+            <div class="text-center mb-4">
+                <a [routerLink]="(authType === 'register') ? '/login' : '/register'"
+                    class="text-blue-600 hover:underline">
+                    {{ authType === 'register' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? S'inscrire"}}
+                </a>
+            </div>
+
+            <!-- Submit button -->
+            <button *ngIf="!isLoading" mat-raised-button type="submit" class="full-width">
+                {{(authType === 'register') ? "S'inscrire" : "Se connecter"}}
+            </button>
+            <!-- Spinner -->
+            <mat-spinner *ngIf="isLoading" diameter="50" class="mx-auto"></mat-spinner>
+        </form>
+    </mat-card>
+</div>

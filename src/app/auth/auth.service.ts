@@ -1,0 +1,55 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+import { environment } from '../../environments/environment';
+import { AuthFormValue } from '../components/auth-form/auth-form-value.interface';
+import { Observable, tap } from 'rxjs';
+import { User } from '../user/user.interface';
+import { UserService } from '../user/user.service';
+import { Router } from '@angular/router';
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private TOKEN_KEY = 'jwt';
+
+  constructor(private http: HttpClient, private userService: UserService, private router: Router) { }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken()
+  }
+
+  login(authFormValue: AuthFormValue): Observable<any> {
+    return this.http.post(`${environment.api}/auth/login`, authFormValue).pipe(
+      tap((response: any) => {
+        const userInfo: User = { id: response.id, username: response.username }
+        this.setSession(response.access_token, userInfo)
+        this.router.navigate(['/dashboard'])
+      })
+    );
+  }
+
+  register(authFormValue: AuthFormValue): Observable<any> {
+    return this.http.post(`${environment.api}/auth/register`, authFormValue).pipe(
+      tap((response: any) => {
+        const userInfo: User = { id: response.id, username: response.username }
+        this.setSession(response.access_token, userInfo)
+        this.router.navigate(['/dashboard'])
+      })
+    );
+  }
+
+  private setSession(token: string, user: User) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+    this.userService.setUser(user);
+  }
+
+  logout() {
+    localStorage.removeItem(this.TOKEN_KEY);
+    this.userService.clearUser()
+    this.router.navigateByUrl('/login')
+  }
+
+  private getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+}
