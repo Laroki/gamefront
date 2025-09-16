@@ -13,4 +13,8 @@ export class GameService {
   createGame(isPrivate: boolean): Observable<any> {
     return this.http.post(`${environment.api}/game/create`, { isPrivate })
   }
+
+  joinGame(gameID: string): Observable<any> {
+    return this.http.patch(`${environment.api}/game/${gameID}/join`, {})
+  }
 }
