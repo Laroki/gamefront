@@ -3,9 +3,9 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
-import { AuthFormValue } from '../components/auth-form/auth-form-value.interface';
+import { AuthFormValue } from '../interfaces/auth-form-value.interface';
 import { Observable, tap } from 'rxjs';
-import { User } from '../user/user.interface';
+import { User } from '../interfaces/user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

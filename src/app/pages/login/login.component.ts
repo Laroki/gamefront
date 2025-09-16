@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthFormComponent } from "../../components/auth-form/auth-form.component";
-import { AuthFormValue } from '../../components/auth-form/auth-form-value.interface';
+import { AuthFormValue } from '../../interfaces/auth-form-value.interface';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
