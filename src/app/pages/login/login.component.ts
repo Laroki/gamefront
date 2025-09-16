@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthFormComponent } from "../../components/auth-form/auth-form.component";
 import { AuthFormValue } from '../../components/auth-form/auth-form-value.interface';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,10 +11,10 @@ import { AuthService } from '../../auth/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  private authService = inject(AuthService)
+  
   isLoading: boolean = false
   wrongCredentials: boolean = false
-
-  constructor(private authService: AuthService) { }
 
   login(authFormValue: AuthFormValue) {
     this.isLoading = true

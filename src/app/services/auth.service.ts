@@ -1,29 +1,31 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
 import { AuthFormValue } from '../components/auth-form/auth-form-value.interface';
 import { Observable, tap } from 'rxjs';
 import { User } from '../user/user.interface';
-import { UserService } from '../user/user.service';
-import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private TOKEN_KEY = 'jwt';
 
-  constructor(private http: HttpClient, private userService: UserService, private router: Router) { }
+  private http = inject(HttpClient);
+  private userService = inject(UserService);
+  private router = inject(Router);
 
   isLoggedIn(): boolean {
-    return !!this.getToken()
+    return !!this.getToken();
   }
 
   login(authFormValue: AuthFormValue): Observable<any> {
     return this.http.post(`${environment.api}/auth/login`, authFormValue).pipe(
       tap((response: any) => {
-        const userInfo: User = { id: response.id, username: response.username }
-        this.setSession(response.access_token, userInfo)
-        this.router.navigate(['/dashboard'])
+        const userInfo: User = { id: response.id, username: response.username };
+        this.setSession(response.access_token, userInfo);
+        this.router.navigate(['/dashboard']);
       })
     );
   }
@@ -31,9 +33,9 @@ export class AuthService {
   register(authFormValue: AuthFormValue): Observable<any> {
     return this.http.post(`${environment.api}/auth/register`, authFormValue).pipe(
       tap((response: any) => {
-        const userInfo: User = { id: response.id, username: response.username }
-        this.setSession(response.access_token, userInfo)
-        this.router.navigate(['/dashboard'])
+        const userInfo: User = { id: response.id, username: response.username };
+        this.setSession(response.access_token, userInfo);
+        this.router.navigate(['/dashboard']);
       })
     );
   }
@@ -45,8 +47,8 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
-    this.userService.clearUser()
-    this.router.navigateByUrl('/login')
+    this.userService.clearUser();
+    this.router.navigateByUrl('/login');
   }
 
   private getToken(): string | null {

@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthFormComponent } from "../../components/auth-form/auth-form.component";
 import { AuthFormValue } from '../../components/auth-form/auth-form-value.interface';
-import { AuthService } from '../../auth/auth.service';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -12,9 +11,9 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  isLoading: boolean = false
+  private authService = inject(AuthService)
 
-  constructor(private authService: AuthService, private router: Router) { }
+  isLoading: boolean = false
 
   register(authFormValue: AuthFormValue) {
     this.isLoading = true
