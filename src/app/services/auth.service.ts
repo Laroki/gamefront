@@ -24,7 +24,6 @@ export class AuthService {
       tap((response: any) => {
         const userInfo: User = { id: response.id, username: response.username };
         this.setSession(response.access_token, userInfo);
-        this.router.navigate(['/dashboard']);
       })
     );
   }
@@ -34,7 +33,6 @@ export class AuthService {
       tap((response: any) => {
         const userInfo: User = { id: response.id, username: response.username };
         this.setSession(response.access_token, userInfo);
-        this.router.navigate(['/dashboard']);
       })
     );
   }
