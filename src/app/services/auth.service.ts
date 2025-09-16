@@ -10,7 +10,6 @@ import { UserService } from '../services/user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private TOKEN_KEY = 'jwt';
 
   private http = inject(HttpClient);
   private userService = inject(UserService);
@@ -41,17 +40,17 @@ export class AuthService {
   }
 
   private setSession(token: string, user: User) {
-    localStorage.setItem(this.TOKEN_KEY, token);
+    localStorage.setItem(environment.jwtLocalStorageKey, token);
     this.userService.setUser(user);
   }
 
   logout() {
-    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(environment.jwtLocalStorageKey);
     this.userService.clearUser();
     this.router.navigateByUrl('/login');
   }
 
   private getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return localStorage.getItem(environment.jwtLocalStorageKey);
   }
 }
