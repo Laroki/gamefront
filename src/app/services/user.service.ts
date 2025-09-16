@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
-import { User } from '../user/user.interface';
+import { inject, Injectable } from '@angular/core';
+import { User } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Game } from '../interfaces/game.interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private http = inject(HttpClient);
 
   getUser(): User | null {
     const user = localStorage.getItem(environment.userInfoStorageKey)
@@ -13,5 +17,9 @@ export class UserService {
       return JSON.parse(user)
     }
     return null
+  }
+
+  getActiveGames(): Observable<Game[]> {
+    return this.http.get(`${environment.api}/user/active-games`) as Observable<Game[]>
   }
 }
