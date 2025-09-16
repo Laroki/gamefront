@@ -1,19 +1,14 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
-import { AuthService } from './auth.service';
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RedirectIfAuthGuard implements CanActivate {
+export const RedirectIfAuthGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  constructor(private authService: AuthService, private router: Router) { }
-
-  canActivate(): boolean {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
-      return false;
-    }
-    return true;
+  if (authService.isLoggedIn()) {
+    router.navigate(['/dashboard']);
+    return false;
   }
-}
+  return true;
+};
