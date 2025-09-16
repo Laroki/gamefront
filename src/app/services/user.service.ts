@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
 import { User } from '../user/user.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private currentUser: User | null = null;
-
-  setUser(user: User) {
-    this.currentUser = user;
-  }
 
   getUser(): User | null {
-    return this.currentUser;
-  }
-
-  clearUser() {
-    this.currentUser = null;
+    const user = localStorage.getItem(environment.userInfoStorageKey)
+    if (user) {
+      return JSON.parse(user)
+    }
+    return null
   }
 }

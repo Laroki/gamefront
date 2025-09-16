@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
     api: 'http://localhost:3000',
-    jwtLocalStorageKey: 'jwt'
+    userInfoStorageKey: 'userInfo',
+    jwtStorageKey: 'jwt'
 };

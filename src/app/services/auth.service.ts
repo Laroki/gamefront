@@ -6,13 +6,11 @@ import { environment } from '../../environments/environment';
 import { AuthFormValue } from '../components/auth-form/auth-form-value.interface';
 import { Observable, tap } from 'rxjs';
 import { User } from '../user/user.interface';
-import { UserService } from '../services/user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
   private http = inject(HttpClient);
-  private userService = inject(UserService);
   private router = inject(Router);
 
   isLoggedIn(): boolean {
@@ -22,8 +20,8 @@ export class AuthService {
   login(authFormValue: AuthFormValue): Observable<any> {
     return this.http.post(`${environment.api}/auth/login`, authFormValue).pipe(
       tap((response: any) => {
-        const userInfo: User = { id: response.id, username: response.username };
-        this.setSession(response.access_token, userInfo);
+        const user: User = { id: response.id, username: response.username };
+        this.setSession(user, response.access_token);
       })
     );
   }
@@ -31,24 +29,24 @@ export class AuthService {
   register(authFormValue: AuthFormValue): Observable<any> {
     return this.http.post(`${environment.api}/auth/register`, authFormValue).pipe(
       tap((response: any) => {
-        const userInfo: User = { id: response.id, username: response.username };
-        this.setSession(response.access_token, userInfo);
+        const user: User = { id: response.id, username: response.username };
+        this.setSession(user, response.access_token);
       })
     );
   }
 
-  private setSession(token: string, user: User) {
-    localStorage.setItem(environment.jwtLocalStorageKey, token);
-    this.userService.setUser(user);
+  private setSession(user: User, access_token: string) {
+    localStorage.setItem(environment.userInfoStorageKey, JSON.stringify(user));
+    localStorage.setItem(environment.jwtStorageKey, access_token)
   }
 
   logout() {
-    localStorage.removeItem(environment.jwtLocalStorageKey);
-    this.userService.clearUser();
+    localStorage.removeItem(environment.userInfoStorageKey);
+    localStorage.removeItem(environment.jwtStorageKey);
     this.router.navigateByUrl('/login');
   }
 
   private getToken(): string | null {
-    return localStorage.getItem(environment.jwtLocalStorageKey);
+    return localStorage.getItem(environment.jwtStorageKey)
   }
 }
