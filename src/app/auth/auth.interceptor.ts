@@ -12,7 +12,7 @@ import { environment } from '../../environments/environment';
 export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem(environment.jwtLocalStorageKey)
+    const token = localStorage.getItem(environment.jwtStorageKey)
 
     if (token) {
       const cloned = req.clone({
