@@ -1,2 +1,57 @@
-<p>dashboard works!</p>
-<button (click)="logout()">logout</button>
+<h1>Welcome {{ username | titlecase }}</h1>
+<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="logout()">logout</button>
+
+
+<div class="flex gap-2 mt-12">
+    <div class="border">
+        <h3>Create Games</h3>
+        <p><mat-slide-toggle [(ngModel)]="isPrivate">{{isPrivate ? 'Privée': 'Public'}}</mat-slide-toggle></p>
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            (click)="createGame()">Create
+            Game</button>
+    </div>
+
+    <div class="border">
+        <h3>My active games</h3>
+        <ul>
+            <li *ngFor="let activeGame of activeGames">
+                {{activeGame.player2?.username || 'no player yet'}}
+                {{ activeGame.isPrivate ? 'privée':'public' }}
+                {{ activeGame.createdAt | timeAgo}}
+                {{ activeGame.status }}
+                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    (click)="joinActiveGame(activeGame.id)">join
+                    game</button>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    (click)="leaveGame(activeGame.id)">leave game</button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="border">
+        <h3>Public Games</h3>
+        <ul>
+            <li *ngFor="let publicGame of publicGames$ | async">
+                {{publicGame.player1.username}}
+                {{ publicGame.createdAt | timeAgo}}
+                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    (click)="joinGameByID(publicGame.id)">Join
+                    Game</button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="border">
+        <h3>Join game by id</h3>
+        <mat-form-field>
+            <mat-label>Game ID</mat-label>
+            <input [(ngModel)]="gameID" matInput placeholder="6ea005b2f9ba">
+        </mat-form-field>
+        <mat-error class="mb-4" *ngIf="noGameFound">
+            partie non trouvée
+        </mat-error>
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            (click)="joinGameByID(gameID)">Join
+            Game</button>
+    </div>
+</div>
