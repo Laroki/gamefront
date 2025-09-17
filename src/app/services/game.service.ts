@@ -15,11 +15,19 @@ export class GameService {
     return this.http.post(`${environment.api}/game/create`, { isPrivate }) as Observable<Game>
   }
 
-  joinGame(gameID: string): Observable<Game> {
-    return this.http.patch(`${environment.api}/game/${gameID}/join`, {}) as Observable<Game>
+  joinGame(gameId: string): Observable<Game> {
+    return this.http.patch(`${environment.api}/game/${gameId}/join`, {}) as Observable<Game>
   }
 
-  leaveGame(gameID: string): Observable<Game> {
-    return this.http.patch(`${environment.api}/game/${gameID}/leave`, {}) as Observable<Game>
+  leaveGame(gameId: string): Observable<Game> {
+    return this.http.patch(`${environment.api}/game/${gameId}/leave`, {}) as Observable<Game>
+  }
+
+  getPublicWaitingGames(): Observable<Game[]> {
+    return this.http.get(`${environment.api}/game/public`) as Observable<Game[]>
+  }
+
+  getGameById(gameId: string): Observable<Game> {
+    return this.http.get(`${environment.api}/game/${gameId}`) as Observable<Game>
   }
 }
