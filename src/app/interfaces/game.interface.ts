@@ -7,7 +7,14 @@ export interface Game {
     createdAt: Date,
     player1: User,
     player2?: User,
-    abandonedBy: User
+    abandonedBy: User,
+    role?: GameRole
+}
+
+export enum GameRole {
+    VIEWER = 'viewer',
+    PLAYER = 'player',
+    OWNER = 'owner',
 }
 
 export enum GameStatus {
