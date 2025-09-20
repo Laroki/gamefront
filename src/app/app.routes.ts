@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth/auth.guard';
 import { RedirectIfAuthGuard } from './auth/redirect-if-auth.guard';
+import { GameResolver } from './pages/game/game.resolver';
 
 export const routes: Routes = [
     {
@@ -26,7 +27,8 @@ export const routes: Routes = [
     {
         path: 'game/:id',
         loadComponent: () => import('./pages/game/game.component').then(m => m.GameComponent),
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        resolve: { game: GameResolver }
     },
     {
         path: '**',
