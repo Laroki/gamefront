@@ -20,7 +20,7 @@
                 {{ activeGame.createdAt | timeAgo}}
                 {{ activeGame.status }}
                 <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    (click)="joinActiveGame(activeGame.id)">join
+                    (click)="joinActiveGame(activeGame.id)">resume
                     game</button>
                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     (click)="leaveGame(activeGame.id)">leave game</button>
