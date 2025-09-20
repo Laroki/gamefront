@@ -30,4 +30,8 @@ export class GameService {
   getGameById(gameId: string): Observable<Game> {
     return this.http.get(`${environment.api}/game/${gameId}`) as Observable<Game>
   }
+
+  sendWord(gameId: string, word: string): Observable<Game> {
+    return this.http.post(`${environment.api}/game/${gameId}/add-word`, { word }) as Observable<Game>
+  }
 }
