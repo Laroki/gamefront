@@ -1,0 +1,69 @@
+@layer components {
+    .btn {
+        @apply rounded py-2 px-4 font-medium transition-all text-white;
+    }
+
+    .btn-send-word {
+        @apply bg-gradient-to-r from-blue-500 to-purple-600 duration-300 transform;
+
+        &:enabled:hover {
+            @apply scale-105 rotate-1 shadow-2xl from-blue-600 to-purple-700;
+        }
+
+        &:disabled {
+            @apply opacity-50 cursor-not-allowed;
+        }
+    }
+
+    .btn-purple {
+        @apply bg-purple-600;
+
+        &:enabled:hover {
+            @apply bg-violet-600;
+        }
+
+        &:disabled {
+            @apply opacity-50 cursor-not-allowed;
+        }
+    }
+
+    .btn-blue {
+        @apply bg-blue-500;
+
+        &:hover {
+            @apply bg-blue-700;
+        }
+    }
+
+    .btn-green {
+        @apply bg-green-500;
+
+        &:hover {
+            @apply bg-green-700;
+        }
+    }
+
+    .btn-red {
+        @apply bg-red-500;
+
+        &:hover {
+            @apply bg-red-700;
+        }
+    }
+
+    .btn-red-outline {
+        @apply border border-red-500 text-red-500;
+
+        &:hover {
+            @apply bg-red-500 text-white;
+        }
+    }
+
+    .btn-white-outline {
+        @apply btn text-black border border-gray-500/10;
+
+        &:hover {
+            @apply bg-gray-700/10;
+        }
+    }
+}
