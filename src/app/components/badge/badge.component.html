@@ -1,0 +1,8 @@
+<span class="badge" [ngClass]="{
+     'private': status === GameVisibility.PRIVATE,
+     'public': status === GameVisibility.PUBLIC,
+     'in_progress': status === GameStatus.IN_PROGRESS,
+     'waiting': status === GameStatus.WAITING
+    }">
+    {{ statusMapper[status] }}
+</span>

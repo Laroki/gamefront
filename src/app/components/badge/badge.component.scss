@@ -1,0 +1,19 @@
+.badge {
+    @apply inline-flex items-center justify-center rounded-md border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap;
+}
+
+.public {
+    @apply bg-green-500 text-white;
+}
+
+.private {
+    @apply bg-gray-200;
+}
+
+.in_progress {
+    @apply bg-blue-500 text-white;
+}
+
+.waiting {
+    @apply bg-yellow-500;
+}
