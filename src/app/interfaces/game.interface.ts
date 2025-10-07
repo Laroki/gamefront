@@ -12,6 +12,26 @@ export interface Game {
     role?: GameRole,
     rounds?: Round[],
     userSentWord?: boolean
+    foundWord?: string;
+}
+
+export interface PublicGames {
+    id: string;
+    createdAt: Date;
+    creator: string
+}
+
+export interface ActiveGames {
+    id: string;
+    isPrivate: boolean;
+    status: GameStatus;
+    createdAt: Date;
+    adversaryUsername: string | null
+}
+
+export enum GameVisibility {
+    PUBLIC = 'public',
+    PRIVATE = 'private'
 }
 
 export enum GameRole {
