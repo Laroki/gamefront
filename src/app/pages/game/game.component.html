@@ -1,5 +1,92 @@
-<h1>{{id()}}</h1>
+<div class="max-w-4xl space-y-8 mx-auto py-8">
+    <div class="flex justify-between items-center">
+        <a [routerLink]="'/dashboard'" class="btn btn-white-outline">
+            ⬅️ Dashboard
+        </a>
+        <Button *ngIf="game.role !=='viewer' && (game.status === 'in_progress' || game.status === 'waiting')"
+            (click)="leaveGame()" class="btn btn-red">
+            🏃‍♂️ Abandonner
+        </Button>
+    </div>
 
-<!-- AFFICHER LE BOUTTON UNIQUEMENT SI LA PARTIE est en cours et qu'on y participe -->
-<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="leaveGame()">leave
-    game</button>
+    <!-- Statut du jeu -->
+    <div *ngIf="game.status === 'won' || game.status === 'abandoned'" class="card text-4xl text-center">
+        <div *ngIf="game.status === 'abandoned'; else wonBlock">{{game.abandonedBy.username | titlecase}} à abandonné
+        </div>
+        <ng-template #wonBlock>
+            <span>🏆"{{ game.foundWord | titlecase}}"🏆</span>
+        </ng-template>
+    </div>
+
+    <!-- Nom des joueurs -->
+    <div class="card">
+        <div class="flex items-center justify-center">
+            <div class="card__player--owner online">{{game.player1.username | titlecase}}</div>
+            <div
+                class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 animate-pulse mx-6">
+                VS
+            </div>
+            <div *ngIf="game.player2; else addPlayer" class="card__player--opponent online">
+                {{game.player2.username || '...' | titlecase}}
+            </div>
+            <ng-template #addPlayer>
+                <button *ngIf="game.role !== 'owner'"
+                    class="btn btn-green !px-8 !py-4 !font-bold !text-xl !shadow-lg"
+                    (click)="joinGame()">Rejoindre</button>
+                <div *ngIf="game.role === 'owner'" class="card__player--opponent offline">
+                    ...
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+    <!-- Historique des rounds -->
+    <div *ngIf="game.rounds && game.rounds.length > 0" class="card">
+        <div #scrollMe class="space-y-6 max-h-[40vh] overflow-y-auto custom-scrollbar">
+            <div *ngFor="let round of game.rounds" class="rounds">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="font-bold text-black text-lg">🎯 Round {{round.roundNumber}}</div>
+                    <div class="text-xs px-3 py-1 rounded-full"
+                        [ngClass]="round.words.length === 2 ? 'text-white bg-green-500' : 'bg-yellow-500 animate-pulse'">
+                        {{round.words.length === 2 ?
+                        'Terminé' : 'En cours'}}</div>
+                </div>
+                <div class="space-y-2">
+                    <div *ngFor="let roundWord of round.words; let i = index" class="p-3 rounded-lg"
+                        [ngClass]="i === 0 ? 'text-blue-200 bg-blue-900/50' : 'text-pink-200 bg-pink-900/50'">
+                        <span class="font-semibold text-white">{{roundWord.user.username | titlecase}}:</span>
+                        <span class="text-white font-medium ml-2">{{roundWord.word}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="game.status === 'in_progress' && game.role !=='viewer' ">
+        <!-- Formulaire d'envoi de mot -->
+        <div *ngIf="!game.userSentWord; else wordSent" class="card">
+            <div class="text-center font-bold text-2xl mb-8">🎯 Round {{game.rounds?.[game.rounds!.length -
+                1]?.roundNumber
+                || 1}}</div>
+            <div class="flex space-x-4">
+                <mat-form-field class="w-full">
+                    <mat-label>Entrer votre mot</mat-label>
+                    <input [disabled]="isLoading" [(ngModel)]="word" matInput placeholder="sun">
+                </mat-form-field>
+                <button [disabled]="isLoading || !word" (click)="sendWord()" [ngClass]="{'animate-bounce': isLoading}"
+                    class="btn btn-send-word max-h-[56px] text-nowrap">
+                    🚀 Envoyer
+                </button>
+            </div>
+        </div>
+
+        <!-- En attente du mot de l'adversaire -->
+        <ng-template #wordSent>
+            <div #wordSent
+                class="card text-center text-lg text-white font-medium bg-gradient-to-r from-blue-500/60 to-purple-600/60 animate-pulse">
+                ⏰ En attente du mot de l'adversaire...
+            </div>
+        </ng-template>
+    </ng-container>
+
+</div>
