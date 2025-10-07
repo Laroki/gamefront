@@ -1,57 +1,146 @@
-<h1>Welcome {{ username | titlecase }}</h1>
-<button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="logout()">logout</button>
-
-
-<div class="flex gap-2 mt-12">
-    <div class="border">
-        <h3>Create Game</h3>
-        <p><mat-slide-toggle [(ngModel)]="isPrivate">{{isPrivate ? 'Privée': 'Public'}}</mat-slide-toggle></p>
-        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            (click)="createGame()">Create
-            Game</button>
+<div class="p-6 max-w-7xl mx-auto space-y-8">
+    <div class="subcard flex justify-between p-12">
+        <div>
+            <h3
+                class="text-3xl !mb-1 !font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Bienvenue, {{ username | titlecase }} !</h3>
+            <p class="text-muted font-medium">Gérez vos parties de devinettes</p>
+        </div>
+        <button class="btn btn-red-outline self-center !mt-0" (click)="logout()">Déconnexion</button>
     </div>
 
-    <div class="border">
-        <h3>My active games</h3>
-        <ul>
-            <li *ngFor="let activeGame of activeGames">
-                {{activeGame.player2?.username || 'no player yet'}}
-                {{ activeGame.isPrivate ? 'privée':'public' }}
-                {{ activeGame.createdAt | timeAgo}}
-                {{ activeGame.status }}
-                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    (click)="joinActiveGame(activeGame.id)">resume
-                    game</button>
-                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    (click)="leaveGame(activeGame.id)">leave game</button>
-            </li>
-        </ul>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <!-- Create Game box -->
+        <div class="subcard border-green-500/20 flex flex-col">
+            <div class="subcard__title text-green-400">
+                🎮 Créer une partie
+            </div>
+            <div class="subcard !p-4 !rounded-lg flex justify-between items-center">
+                <div class="flex flex-col">
+                    <span class="font-medium">Type de partie</span>
+                    <span class="text-sm text-muted">
+                        {{isPrivate ? 'Partie privée - Sur invitation uniquement':'Partie publique - Visible par tous'}}
+                    </span>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" [(ngModel)]="isPrivate" class="sr-only peer">
+                    <div class="slide-toggle"></div>
+                    <span [ngClass]="isPrivate ? 'text-green-500' : 'text-blue-500'"
+                        class="ml-3 text-sm font-medium">{{isPrivate ? 'Privée':
+                        'Public'}}</span>
+                </label>
+            </div>
+            <button class="btn btn-green w-full lg:!mt-auto" (click)="createGame()">✨ Créer la partie
+            </button>
+        </div>
+
+        <!-- Join Game box -->
+        <div class="subcard border-purple-500/20">
+            <div class="subcard__title text-purple-400">
+                🔗 Rejoindre par ID
+            </div>
+            <div class="flex flex-col">
+                <label class="text-m font-medium text-muted mb-1">ID de la partie</label>
+                <mat-form-field>
+                    <mat-label>Game ID</mat-label>
+                    <input [(ngModel)]="gameID" matInput placeholder="6ea005b2f9ba">
+                </mat-form-field>
+                <mat-error class="mb-2" *ngIf="noGameFound && gameID !=='' ">
+                    partie non trouvée
+                </mat-error>
+            </div>
+            <button [disabled]="gameID === ''" class="btn btn-purple w-full !mb-auto" (click)="joinGameByID(gameID)">🚀
+                Rejoindre la partie</button>
+        </div>
     </div>
 
-    <div class="border">
-        <h3>Public Games</h3>
-        <ul>
-            <li *ngFor="let publicGame of publicGames$ | async">
-                {{publicGame.player1.username}}
-                {{ publicGame.createdAt | timeAgo}}
-                <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    (click)="joinGameByID(publicGame.id)">Join
-                    Game</button>
-            </li>
-        </ul>
+    <div class="subcard border-blue-500/20">
+        <div class="subcard__title text-blue-400">
+            🎯 Mes parties actives
+        </div>
+        <div class="table__custom">
+            <table>
+                <thead data-slot="table-header">
+                    <tr data-slot="table-row">
+                        <th data-slot="table-head">
+                            Adversaire</th>
+                        <th data-slot="table-head">
+                            Type</th>
+                        <th data-slot="table-head">
+                            Date</th>
+                        <th data-slot="table-head">
+                            Statut</th>
+                        <th data-slot="table-head">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody data-slot="table-body">
+                    <tr *ngFor="let activeGame of activeGames" data-slot="table-row">
+                        <td data-slot="table-cell" class="font-medium flex items-center space-x-2">
+                            <span data-slot="avatar-fallback"
+                                class="table__custom__avatar bg-gradient-to-br from-blue-400 to-purple-400">{{(activeGame.adversaryUsername?.[0]
+                                | titlecase) || 'N/A'}}
+                            </span>
+                            <span>{{activeGame.adversaryUsername || '' | titlecase}}</span>
+                        </td>
+                        <td data-slot="table-cell">
+                            <app-badge data-slot="badge"
+                                [status]="activeGame.isPrivate ? GameVisibility.PRIVATE : GameVisibility.PUBLIC">
+                            </app-badge>
+                        </td>
+                        <td data-slot="table-cell" class="text-muted">
+                            {{ activeGame.createdAt | timeAgo}}</td>
+                        <td data-slot="table-cell">
+                            <app-badge data-slot="badge" [status]="activeGame.status"></app-badge>
+                        </td>
+                        <td data-slot="table-cell" class="space-x-2">
+                            <button data-slot="button" class="btn btn-blue" (click)="joinActiveGame(activeGame.id)">
+                                Reprendre</button>
+                            <button data-slot="button" class="btn btn-red-outline" (click)="leaveGame(activeGame.id)">
+                                Quitter
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <div class="border">
-        <h3>Join game by id</h3>
-        <mat-form-field>
-            <mat-label>Game ID</mat-label>
-            <input [(ngModel)]="gameID" matInput placeholder="6ea005b2f9ba">
-        </mat-form-field>
-        <mat-error class="mb-4" *ngIf="noGameFound">
-            partie non trouvée
-        </mat-error>
-        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            (click)="joinGameByID(gameID)">Join
-            Game</button>
+    <div class="subcard border-orange-500/20">
+        <div class="subcard__title text-orange-400">
+            🌍 Parties publiques
+        </div>
+        <div class="table__custom">
+            <table>
+                <thead data-slot="table-header">
+                    <tr data-slot="table-row">
+                        <th data-slot="table-head">
+                            Créateur</th>
+                        <th data-slot="table-head">
+                            Date de création</th>
+                        <th data-slot="table-head">
+                            Action</th>
+                    </tr>
+                </thead>
+                <tbody data-slot="table-body">
+                    <tr *ngFor="let publicGame of publicGames$ | async" data-slot="table-row">
+                        <td data-slot="table-cell" class="font-medium flex items-center space-x-2">
+                            <span data-slot="avatar-fallback"
+                                class="table__custom__avatar bg-gradient-to-br from-blue-400 to-purple-400">{{(publicGame.creator[0]
+                                | titlecase)}}
+                            </span>
+                            <span>{{publicGame.creator | titlecase}}</span>
+                        </td>
+                        <td data-slot="table-cell" class="text-muted">
+                            {{ publicGame.createdAt | timeAgo}}</td>
+                        <td data-slot="table-cell">
+                            <button data-slot="button" class="btn btn-blue" (click)="joinGameByID(publicGame.id)">
+                                Rejoindre
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

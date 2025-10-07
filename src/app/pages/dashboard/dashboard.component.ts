@@ -3,19 +3,19 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TitleCasePipe, CommonModule } from '@angular/common';
 
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
 
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
 import { UserService } from '../../services/user.service';
 import { timeAgoPipe } from '../../pipes/time-ago.pipe';
-import { Game } from '../../interfaces/game.interface';
+import { ActiveGames, GameVisibility } from '../../interfaces/game.interface';
+import { BadgeComponent } from '../../components/badge/badge.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatSlideToggleModule, FormsModule, MatInputModule, TitleCasePipe, CommonModule, timeAgoPipe],
+  imports: [FormsModule, MatInputModule, TitleCasePipe, CommonModule, timeAgoPipe, BadgeComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -24,11 +24,12 @@ export class DashboardComponent implements OnInit {
   private gameService = inject(GameService)
   userService = inject(UserService)
   private router = inject(Router)
+  GameVisibility = GameVisibility;
 
   isPrivate = true;
   gameID = '';
   username = this.userService.getUser()?.username
-  activeGames: Game[] = []
+  activeGames: ActiveGames[] = []
   publicGames$ = this.gameService.getPublicWaitingGames()
   noGameFound = false
 

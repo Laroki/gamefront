@@ -1,0 +1,53 @@
+.subcard__title {
+    @apply text-2xl font-bold flex items-center;
+}
+
+.table__custom {
+    @apply rounded-lg border border-gray-500/10 text-sm;
+
+    table {
+        @apply w-full;
+    }
+
+    thead {
+        @apply hover:bg-gray-400/10 border-b border-gray-500/10;
+
+        th {
+            @apply h-10 px-2 align-middle whitespace-nowrap font-medium text-left;
+
+            &:last-child {
+                @apply text-right;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            @apply border-b border-gray-500/10 hover:bg-gray-400/10;
+
+            td {
+                @apply p-2 align-middle whitespace-nowrap;
+
+                &:last-child {
+                    @apply text-right;
+                }
+            }
+        }
+    }
+
+    .table__custom__avatar {
+        @apply overflow-hidden h-8 w-8 text-center leading-8 rounded-full text-white;
+    }
+}
+
+.text-muted {
+    @apply text-gray-500/60;
+}
+
+.slide-toggle {
+    @apply w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500;
+}
+
+.subcard {
+    @apply border p-6 shadow-sm rounded-xl space-y-6;
+}
