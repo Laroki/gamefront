@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
 import { UserService } from '../../services/user.service';
 import { timeAgoPipe } from '../../pipes/time-ago.pipe';
-import { ActiveGames, GameVisibility } from '../../interfaces/game.interface';
+import { ActiveGames, GameVisibility, PublicGames } from '../../interfaces/game.interface';
 import { BadgeComponent } from '../../components/badge/badge.component';
 
 @Component({
@@ -26,19 +26,28 @@ export class DashboardComponent implements OnInit {
   private router = inject(Router)
   GameVisibility = GameVisibility;
 
-  isPrivate = true;
+  isPrivate = false;
   gameID = '';
   username = this.userService.getUser()?.username
   activeGames: ActiveGames[] = []
-  publicGames$ = this.gameService.getPublicWaitingGames()
+  publicGames: PublicGames[] = []
   noGameFound = false
+  publicGameIsLoading = false
 
   ngOnInit() {
     this.userService.getActiveGames().subscribe(games => {
       this.activeGames = games;
     });
+
+    this.fetchPublicGames()
   }
 
+  fetchPublicGames() {
+    this.publicGameIsLoading = true
+    this.gameService.getPublicWaitingGames().subscribe(publicGames => {
+      this.publicGames = publicGames;
+    }).add(() => this.publicGameIsLoading = false)
+  }
 
   logout() {
     this.authService.logout()

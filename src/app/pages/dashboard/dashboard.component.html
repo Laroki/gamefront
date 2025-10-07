@@ -26,7 +26,7 @@
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" [(ngModel)]="isPrivate" class="sr-only peer">
                     <div class="slide-toggle"></div>
-                    <span [ngClass]="isPrivate ? 'text-green-500' : 'text-blue-500'"
+                    <span [ngClass]="isPrivate ? 'text-blue-500' : 'text-green-500'"
                         class="ml-3 text-sm font-medium">{{isPrivate ? 'Privée':
                         'Public'}}</span>
                 </label>
@@ -59,7 +59,7 @@
         <div class="subcard__title text-blue-400">
             🎯 Mes parties actives
         </div>
-        <div class="table__custom">
+        <div class="table__custom" *ngIf="activeGames.length > 0; else noGames">
             <table>
                 <thead data-slot="table-header">
                     <tr data-slot="table-row">
@@ -107,10 +107,14 @@
         </div>
     </div>
     <div class="subcard border-orange-500/20">
-        <div class="subcard__title text-orange-400">
-            🌍 Parties publiques
+        <div class="flex justify-between items-center text-orange-400">
+            <div class="subcard__title">
+                🌍 Parties publiques
+            </div>
+            <span class="text-3xl cursor-pointer" [ngClass]="{'animate-spin': publicGameIsLoading}"
+                (click)="fetchPublicGames()">⟳</span>
         </div>
-        <div class="table__custom">
+        <div class="table__custom" *ngIf="publicGames.length > 0; else noGames">
             <table>
                 <thead data-slot="table-header">
                     <tr data-slot="table-row">
@@ -123,7 +127,7 @@
                     </tr>
                 </thead>
                 <tbody data-slot="table-body">
-                    <tr *ngFor="let publicGame of publicGames$ | async" data-slot="table-row">
+                    <tr *ngFor="let publicGame of publicGames" data-slot="table-row">
                         <td data-slot="table-cell" class="font-medium flex items-center space-x-2">
                             <span data-slot="avatar-fallback"
                                 class="table__custom__avatar bg-gradient-to-br from-blue-400 to-purple-400">{{(publicGame.creator[0]
@@ -144,3 +148,7 @@
         </div>
     </div>
 </div>
+
+<ng-template #noGames>
+    <p class="text-2xl text-center font-semibold">Pas de parties</p>
+</ng-template>
