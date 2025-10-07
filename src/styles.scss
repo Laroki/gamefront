@@ -1,5 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@import './styles/buttons.scss';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.card {
+  @apply bg-white/10 rounded-xl p-8 shadow-xl border-2 border-gray-500/10;
+}
+
+.subcard {
+  @apply border p-6 shadow-sm rounded-xl space-y-6;
+}
