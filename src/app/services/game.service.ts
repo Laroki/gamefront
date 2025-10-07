@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Game } from '../interfaces/game.interface';
+import { Game, PublicGames } from '../interfaces/game.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +23,8 @@ export class GameService {
     return this.http.patch(`${environment.api}/game/${gameId}/leave`, {}) as Observable<Game>
   }
 
-  getPublicWaitingGames(): Observable<Game[]> {
-    return this.http.get(`${environment.api}/game/public`) as Observable<Game[]>
+  getPublicWaitingGames(): Observable<PublicGames[]> {
+    return this.http.get(`${environment.api}/game/public`) as Observable<PublicGames[]>
   }
 
   getGameById(gameId: string): Observable<Game> {

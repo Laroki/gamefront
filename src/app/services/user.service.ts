@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { User } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Game } from '../interfaces/game.interface';
+import { ActiveGames } from '../interfaces/game.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class UserService {
     return null
   }
 
-  getActiveGames(): Observable<Game[]> {
-    return this.http.get(`${environment.api}/user/active-games`) as Observable<Game[]>
+  getActiveGames(): Observable<ActiveGames[]> {
+    return this.http.get(`${environment.api}/user/active-games`) as Observable<ActiveGames[]>
   }
 }
