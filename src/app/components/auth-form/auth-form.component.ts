@@ -1,15 +1,15 @@
-import { Component, Input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
-import { AuthFormValue } from '../../interfaces/auth-form-value.interface';
-// Angular Material
+import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RouterLink } from '@angular/router';
+
+import { AuthFormValue } from '../../interfaces/auth-form-value.interface';
 
 @Component({
   selector: 'app-auth-form',
@@ -28,9 +28,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './auth-form.component.scss'
 })
 export class AuthFormComponent {
-  @Input() authType: 'register' | 'login' = 'register'
-  @Input() isLoading: boolean = false
-  @Input() wrongCredentials: boolean = false
+  authType = input<'register' | 'login'>('register')
+  isLoading = input(false)
+  wrongCredentials = input(false)
   formSubmitted = output<AuthFormValue>()
   authForm: FormGroup
 

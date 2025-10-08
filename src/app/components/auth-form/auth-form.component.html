@@ -1,6 +1,6 @@
 <div class="authform-container">
     <mat-card class="authform-card">
-        <h2>{{(authType === 'register') ? "S'inscrire" : "Connexion"}}</h2>
+        <h2>{{(authType() === 'register') ? "S'inscrire" : "Connexion"}}</h2>
         <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
 
             <!-- Username -->
@@ -35,23 +35,23 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-error class="mb-4" *ngIf="wrongCredentials">
+            <mat-error class="mb-4" *ngIf="wrongCredentials()">
                 Nom d’utilisateur ou mot de passe invalide.
             </mat-error>
 
             <div class="text-center mb-4">
-                <a [routerLink]="(authType === 'register') ? '/login' : '/register'"
+                <a [routerLink]="(authType() === 'register') ? '/login' : '/register'"
                     class="text-blue-600 hover:underline">
-                    {{ authType === 'register' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? S'inscrire"}}
+                    {{ authType() === 'register' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? S'inscrire"}}
                 </a>
             </div>
 
             <!-- Submit button -->
-            <button *ngIf="!isLoading" mat-raised-button type="submit" class="full-width">
-                {{(authType === 'register') ? "S'inscrire" : "Se connecter"}}
+            <button *ngIf="!isLoading()" mat-raised-button type="submit" class="full-width">
+                {{(authType() === 'register') ? "S'inscrire" : "Se connecter"}}
             </button>
             <!-- Spinner -->
-            <mat-spinner *ngIf="isLoading" diameter="50" class="mx-auto"></mat-spinner>
+            <mat-spinner *ngIf="isLoading()" diameter="50" class="mx-auto"></mat-spinner>
         </form>
     </mat-card>
 </div>
