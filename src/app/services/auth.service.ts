@@ -35,15 +35,15 @@ export class AuthService {
     );
   }
 
-  private setSession(user: User, access_token: string) {
-    localStorage.setItem(environment.userInfoStorageKey, JSON.stringify(user));
-    localStorage.setItem(environment.jwtStorageKey, access_token)
-  }
-
   logout() {
     localStorage.removeItem(environment.userInfoStorageKey);
     localStorage.removeItem(environment.jwtStorageKey);
     this.router.navigateByUrl('/login');
+  }
+
+  private setSession(user: User, access_token: string) {
+    localStorage.setItem(environment.userInfoStorageKey, JSON.stringify(user));
+    localStorage.setItem(environment.jwtStorageKey, access_token)
   }
 
   private getToken(): string | null {
