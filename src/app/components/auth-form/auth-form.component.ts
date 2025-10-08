@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -31,7 +31,7 @@ export class AuthFormComponent {
   @Input() authType: 'register' | 'login' = 'register'
   @Input() isLoading: boolean = false
   @Input() wrongCredentials: boolean = false
-  @Output() formSubmitted = new EventEmitter<AuthFormValue>()
+  formSubmitted = output<AuthFormValue>()
   authForm: FormGroup
 
   constructor(private fb: FormBuilder) {
